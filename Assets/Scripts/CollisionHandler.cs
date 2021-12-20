@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class CollisionHandler : MonoBehaviour
 {
+    [SerializeField] float crashDelay = 1f;
+    [SerializeField] float nextLevelDelay = 1f;
+
     private void OnCollisionEnter(Collision other)
     {
         switch (other.gameObject.tag)
@@ -13,20 +16,45 @@ public class CollisionHandler : MonoBehaviour
                 Debug.Log("Collided with friendly");
                 break;
             case "Finish":
-                Debug.Log("Collided with finish");
+                StartNextLevelSequence();
                 break;
             case "Fuel":
                 Debug.Log("Collided with fuel");
                 break;
             default:
-                RestartLevel();
+                StartCrashSequence();
                 break;
         }
+    }
+
+    void StartCrashSequence()
+    {
+        GetComponent<Movement>().enabled = false;
+        Invoke("RestartLevel", crashDelay);
+    }
+
+    void StartNextLevelSequence()
+    {
+        GetComponent<Movement>().enabled = false;
+        Invoke("LoadNextLevel", nextLevelDelay);
     }
 
     void RestartLevel()
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
+    }
+
+    void LoadNextLevel()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int nextSceneIndex = currentSceneIndex + 1;
+
+        if (nextSceneIndex == SceneManager.sceneCountInBuildSettings)
+        {
+            nextSceneIndex = 0;
+        }
+
+        SceneManager.LoadScene(nextSceneIndex);
     }
 }
