@@ -12,20 +12,36 @@ public class Movement : MonoBehaviour
     [SerializeField] ParticleSystem rightThrustParticle;
 
     Rigidbody rb;
+    CollisionHandler ch;
     AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        ch = GetComponent<CollisionHandler>();
         audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        ProcessDebug();
         ProcessThrust();
         ProcessRotation();
+    }
+
+    void ProcessDebug()
+    {
+        if (Input.GetKey(KeyCode.C))
+        {
+            ch.isTransitioning = !ch.isTransitioning;
+        }
+
+        if (Input.GetKey(KeyCode.L))
+        {
+            ch.LoadNextLevel();
+        }
     }
 
     void ProcessThrust()

@@ -14,7 +14,7 @@ public class CollisionHandler : MonoBehaviour
 
     AudioSource audioSource;
 
-    bool isTransitioning = false;
+    public bool isTransitioning = false;
 
     void Start()
     {
@@ -71,7 +71,7 @@ public class CollisionHandler : MonoBehaviour
         SceneManager.LoadScene(currentSceneIndex);
     }
 
-    void LoadNextLevel()
+    public void LoadNextLevel()
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         int nextSceneIndex = currentSceneIndex + 1;
